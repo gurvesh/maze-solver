@@ -1,4 +1,4 @@
-from window import Point, Line
+from window import Point
 from cell import Cell
 import time
 import random
@@ -43,11 +43,11 @@ class Maze():
                 
         self._animate()
     
-    def _animate(self):
+    def _animate(self, lag=0.0):
         if not self.win:
             return
         self.win.redraw()
-        # time.sleep(0.002)
+        time.sleep(lag)
 
     def _break_entrance_and_exit(self):
         top_left_cell = self._cells[0][0]
@@ -109,7 +109,7 @@ class Maze():
         return self._solve_r((0,0))
     
     def _solve_r(self, coords):
-        self._animate()
+        self._animate(lag=0.03)
         i, j = coords
         current_cell = self._cells[i][j]
         current_cell.visited = True
@@ -129,3 +129,8 @@ class Maze():
             if new_cell:
                 current_cell.draw_move(new_cell, undo=True)
         return False
+    
+    def redraw(self):
+        self.win.canvas.delete("all")
+        self._draw_cells()
+        self.reset_cells_visited()

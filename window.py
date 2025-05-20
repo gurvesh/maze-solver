@@ -1,4 +1,4 @@
-from tkinter import Tk, BOTH, Canvas
+from tkinter import Tk, BOTH, Canvas, Button, Frame, Label, Entry, StringVar
 
 class Window():
     def __init__(self, width, height):
@@ -9,7 +9,25 @@ class Window():
         self.canvas = Canvas(width=width, height=height, bg="white")
         self.canvas.pack(fill=BOTH, expand=1)
         self.window_running = False
+
+        self.num_rows_var = StringVar()
+        self.num_cols_var = StringVar()
+        self.size_input_frame1 = Frame(self.root)
+        self.lab1 = Label(self.size_input_frame1, width=20, text='Enter rows (max 40)', anchor='w')
+        self.ent1 = Entry(self.size_input_frame1, textvariable=self.num_rows_var)
+        self.size_input_frame2 = Frame(self.root)
+        self.lab2 = Label(self.size_input_frame2, width=20, text='Enter cols (max 40)', anchor='w')
+        self.ent2 = Entry(self.size_input_frame2, textvariable=self.num_cols_var)
+        self.size_input_frame1.pack(side="left")
+        self.size_input_frame2.pack(side="left")
+
+        self.lab1.pack(side="left")
+        self.ent1.pack(side="right")
+        self.lab2.pack(side="left")
+        self.ent2.pack(side="right")
         self.root.protocol("WM_DELETE_WINDOW", self.close)
+
+
 
     def redraw(self):
         self.root.update_idletasks()
@@ -44,3 +62,10 @@ class Line():
             x1, y1, x2, y2, fill=self.color, width=2
         )
 
+class My_button():
+    def __init__(self, text, win, action=None):
+        self.button = Button(win.root, text=text, command=action)
+        self.button.pack()
+
+    def reassign_action(self, action):
+        self.button = Button()

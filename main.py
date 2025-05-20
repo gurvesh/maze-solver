@@ -1,33 +1,37 @@
-from window import Window, Point, Line
+from window import Window, Point, Line, My_button
 from cell import Cell
 from maze import Maze
 
-win = Window(1000, 1000)
-# p1 = Point(2,2)
-# p2 = Point(100,100)
-# l1 = Line(p1, p2)
-# win.draw_line(l1, "red")
-# cell1 = Cell(p1, p2, win)
-# cell1.draw("green")
+win = Window(900, 900)
+maze = None
 
-# p3 = Point(5,5)
-# p4 = Point(10,10)
-# cell2 = Cell(p3, p4, win)
-# cell2.has_left_wall = False
-# cell2.draw("purple")
-# cell1.draw_move(cell2)
+create_maze_button = My_button("Create maze", win)
+but1 = My_button("Solve", win)
+but2 = My_button("Reset", win)
 
-maze1 = Maze(
-    x1=10,
-    y1=10,
-    num_rows=40,
-    num_cols=40,
-    cell_size_x=20,
-    cell_size_y=20,
-    win=win
-)
+def create_maze():
+    global maze, win, but1, but2, create_maze_button
+    win.canvas.delete("all")
+    win.redraw()
+    try:
+        num_rows = min(int(win.num_rows_var.get()), 40)
+        num_cols = min(int(win.num_cols_var.get()), 40)
+    except Exception as e:
+        print(e)
+    cell_width = (win.canvas.winfo_width() // num_cols) - 2
+    cell_height = (win.canvas.winfo_height() // num_rows) - 2
+    maze = Maze(
+        x1=10,
+        y1=10,
+        num_rows=num_rows,
+        num_cols=num_cols,
+        cell_size_x=cell_width,
+        cell_size_y=cell_height,
+        win=win
+    )
+    but1.button.configure(command=maze.solve)
+    but2.button.configure(command=maze.redraw)
 
-maze1.solve()
-
+create_maze_button.button.configure(command=create_maze)
 
 win.wait_for_close()
